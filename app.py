@@ -16,4 +16,24 @@ if uploaded_file is not None:
 
 st.markdown("---")
 st.caption("Developed by Lakshya Rawat")
+import streamlit as st
+import pandas as pd
+
+st.title("Tar Load Estimation in Human Lungs")
+st.markdown("🔍 Upload a CSV file to estimate tar accumulation.")
+
+uploaded_file = st.file_uploader("Upload CSV", type="csv")
+
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    st.success("✅ File uploaded successfully!")
+    
+    st.subheader("📊 Uploaded Data")
+    st.write(df)
+
+    # Dummy prediction logic
+    st.subheader("🧠 Model Output")
+    df['Predicted Tar Load'] = df['YearsSmoking'] * df['CigarettesPerDay'] * 0.1  # simple placeholder
+    st.write(df[['Age', 'YearsSmoking', 'CigarettesPerDay', 'Gender', 'PassiveSmoking', 'Predicted Tar Load']])
+
 
