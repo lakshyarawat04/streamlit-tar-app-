@@ -1,52 +1,36 @@
 import streamlit as st
 import pandas as pd
 
-# Page Configuration
-st.set_page_config(page_title="Tar Load Estimation", layout="centered")
+st.title("🫁 Tar Load Estimation in Human Lungs")
 
-# Title and Description
-st.title("Tar Load Estimation in Human Lungs")
-st.markdown("👋 **Welcome!** This Streamlit app helps estimate tar accumulation in human lungs using Machine Learning.")
-st.markdown("---")
+st.markdown("""
+👋 Welcome! This Streamlit app helps estimate tar accumulation in human lungs using Machine Learning.
+""")
 
-# File Upload Section
-st.header("🚀 Upload Your Input File")
-st.caption("Choose a CSV file containing the following columns: `age`, `years_smoking`, `cigarettes_per_day`, `gender`, `passive_smoking`")
-uploaded_file = st.file_uploader("Drag and drop file here", type="csv")
+uploaded_file = st.file_uploader("🚀 Upload Your Input File", type=["csv"])
 
-# Main App Logic
 if uploaded_file is not None:
-    try:
-        # Read CSV
-        df = pd.read_csv(uploaded_file)
-        st.success("✅ File uploaded successfully!")
+    df = pd.read_csv(uploaded_file)
 
-        # Show available columns
-        st.write("📄 **Columns in uploaded file:**", df.columns.tolist())
+    required_columns = ['age', 'years_smoking', 'cigarettes_per_day', 'gender', 'passive_smoking']
+    missing_cols = [col for col in required_columns if col not in df.columns]
 
-        # Display uploaded data
-        st.subheader("📊 Uploaded Data")
+    if missing_cols:
+        st.error(f"❌ Missing columns in uploaded file: {missing_cols}")
+    else:
+        # Predict tar load (placeholder logic)
+        df['Predicted Tar Load (mg)'] = df['years_smoking'] * df['cigarettes_per_day'] * 0.1
+
+        # Determine risk level
+        def risk_level(tar):
+            if tar <= 10:
+                return "Low Risk"
+            elif tar <= 30:
+                return "Medium Risk"
+            else:
+                return "High Risk"
+
+        df['Risk Level'] = df['Predicted Tar Load (mg)'].apply(risk_level)
+
+        st.markdown("### 🧠 Predicted Tar Load")
         st.dataframe(df)
-
-        # Check required columns exist
-        required_columns = ['age', 'years_smoking', 'cigarettes_per_day', 'gender', 'passive_smoking']
-        missing_cols = [col for col in required_columns if col not in df.columns]
-        
-        if missing_cols:
-            st.error(f"❌ Missing columns in uploaded file: {missing_cols}")
-        else:
-            # Dummy Tar Load Estimation logic (replace with ML model later)
-            df['Predicted Tar Load'] = df['years_smoking'] * df['cigarettes_per_day'] * 0.1
-
-            # Display Results
-            st.subheader("🧠 Predicted Tar Load")
-            st.dataframe(df[['age', 'years_smoking', 'cigarettes_per_day', 'gender', 'passive_smoking', 'Predicted Tar Load']])
-
-    except Exception as e:
-        st.error(f"⚠️ An error occurred while processing the file:\n\n{e}")
-
-# Footer
-st.markdown("---")
-st.markdown("Developed by **Lakshya Rawat**")
-
-   
