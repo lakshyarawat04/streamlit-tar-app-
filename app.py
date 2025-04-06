@@ -12,7 +12,7 @@ uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     
-    # Check required columns
+    # Required columns
     expected_columns = ['age', 'years_smoking', 'cigarettes_per_day', 'gender', 'passive_smoking']
     missing_cols = [col for col in expected_columns if col not in df.columns]
 
@@ -36,16 +36,15 @@ if uploaded_file is not None:
         st.markdown("## 🧠 Predicted Tar Load")
         st.dataframe(df)
 
-        # Download button
+        # 📥 Download report button
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="📥 Download Results as CSV",
+            label="📥 Download Your Report",
             data=csv,
-            file_name='tar_predictions.csv',
+            file_name='tar_load_report.csv',
             mime='text/csv',
+            help="Download your personalized tar load report as a CSV file."
         )
 
 st.markdown("---")
 st.markdown("Developed by **Lakshya Rawat**")
-
-            
